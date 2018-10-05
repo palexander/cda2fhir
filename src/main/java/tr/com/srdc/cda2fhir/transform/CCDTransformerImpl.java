@@ -129,6 +129,9 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
                 }
                 break;
             default:
+                for(Entry entry : documentBundle.getEntry()) {
+                    addFullUrlToEntry(entry);
+                }
                 return documentBundle;
         }
         return resultBundle;
@@ -250,6 +253,11 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
                 }
             }
             else if(cdaSec instanceof PayersSection) {
+                PayersSection payerSec = (PayersSection) cdaSec;
+                for (CoverageActivity coverageAct : payerSec.getCoverageActivities()) {
+                    Bundle coverageBundle = resTransformer.tCoverageActivity2CoverageStatement(coverageAct);
+                    mergeBundles(coverageBundle, ccdBundle, fhirSec, Coverage.class);
+                }
 
             }
             else if(cdaSec instanceof PlanOfCareSection) {

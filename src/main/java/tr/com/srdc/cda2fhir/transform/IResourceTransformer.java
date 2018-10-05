@@ -291,4 +291,11 @@ public interface IResourceTransformer {
 	 * @return A FHIR Bundle that contains the Observation as the first entry, which can also include other referenced resources such as Encounter, Practitioner
 	 */
     Bundle tVitalSignObservation2Observation(VitalSignObservation cdaVitalSignObservation);
+
+	/**
+	 * Transforms a CDA CoverageActivity to a FHIR Observation resource.
+	 * @param coverageAct A CDA CoverageActivity instance
+	 * @return A FHIR Bundle that contains the Observation as the first entry, which can also include other referenced resources such as Encounter, Practitioner
+	 */
+	Bundle tCoverageActivity2CoverageStatement(CoverageActivity coverageAct);
 }
