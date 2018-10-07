@@ -250,6 +250,15 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
                 for(MedicationActivity medAct : medSec.getMedicationActivities()) {
                     Bundle medBundle = resTransformer.tMedicationActivity2MedicationStatement(medAct);
                     mergeBundles(medBundle, ccdBundle, fhirSec, MedicationStatement.class);
+                    // medication dispense
+                    if (medAct.getMedicationDispenses() != null && !medAct.getMedicationDispenses().isEmpty()) {
+                        for (org.openhealthtools.mdht.uml.cda.consol.MedicationDispense medDisp : medAct.getMedicationDispenses()) {
+                            if (medDisp != null && !medDisp.isSetNullFlavor()) {
+                                Bundle fhirMedDispBundle = resTransformer.tMedicationDispense2MedicationDispense(medDisp);
+                                mergeBundles(fhirMedDispBundle, ccdBundle, fhirSec, org.openhealthtools.mdht.uml.cda.consol.MedicationDispense.class);
+                            }
+                        }
+                    }
                 }
             }
             else if(cdaSec instanceof PayersSection) {

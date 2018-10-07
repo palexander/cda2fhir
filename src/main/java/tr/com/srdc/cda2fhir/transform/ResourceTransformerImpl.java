@@ -1801,9 +1801,15 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             TimingDt fhirTiming = new TimingDt();
 
             // adding effectiveTimes to fhirTiming
-            for (org.openhealthtools.mdht.uml.hl7.datatypes.SXCM_TS ts : cdaMedicationDispense.getEffectiveTimes()) {
+            for (org.openhealthtools.mdht.uml.hl7.datatypes.TS ts : cdaMedicationDispense.getEffectiveTimes()) {
                 if (ts != null && !ts.isSetNullFlavor()) {
-                    fhirTiming.addEvent(dtt.tTS2DateTime(ts));
+                    if (ts instanceof IVL_TS) {
+                        TimingDt.Repeat repeat = new TimingDt.Repeat();
+                        repeat.setBounds(dtt.tIVL_TS2Period((IVL_TS) ts));
+                        fhirTiming.setRepeat(repeat);
+                    } else {
+                        fhirTiming.addEvent(dtt.tTS2DateTime(ts));
+                    }
                 } else if (ts.getValue() != null && !ts.getValue().isEmpty()) {
                     fhirTiming.addEvent(dtt.tString2DateTime(ts.getValue()));
                 }
@@ -2808,7 +2814,8 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
                 if (!code.isSetNullFlavor()) {
                     newCode.setCode(code.getCode());
                     newCode.setDisplay(code.getDisplayName());
-                    newCode.setSystem(vst.tOid2Url(code.getCodeSystem()));
+                    if (code.getCodeSystem() != null)
+                        newCode.setSystem(vst.tOid2Url(code.getCodeSystem()));
                     newCode.setVersion(code.getCodeSystemVersion());
                 }
                 coverage.setType(newCode);
