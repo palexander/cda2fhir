@@ -20,6 +20,7 @@ package tr.com.srdc.cda2fhir.transform;
  * #L%
  */
 
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.*;
 import ca.uhn.fhir.model.dstu2.resource.Bundle.Entry;
@@ -31,6 +32,7 @@ import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.HTTPVerbEnum;
 import org.openhealthtools.mdht.uml.cda.*;
 import org.openhealthtools.mdht.uml.cda.consol.*;
+import org.openhealthtools.mdht.uml.hl7.datatypes.CD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tr.com.srdc.cda2fhir.util.IdGeneratorEnum;
@@ -165,6 +167,12 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
             patientRef = new ResourceReferenceDt(ccdBundle.getEntry().get(1).getResource().getId());
         else // Correct the subject at composition with given patient reference.
             ccdComposition.setSubject(patientRef);
+
+        CD docCode = ccd.getCode();
+        if (docCode != null && !docCode.isSetNullFlavor()) {
+            CodeableConceptDt code = resTransformer.tCE2CodeableConcept(docCode);
+            ccdComposition.setType(code);
+        }
 
         // transform the sections
         for(Section cdaSec: ccd.getSections()) {
