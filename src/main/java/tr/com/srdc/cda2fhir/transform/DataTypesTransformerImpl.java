@@ -198,8 +198,11 @@ public class DataTypesTransformerImpl implements IDataTypesTransformer, Serializ
 	public CodeableConceptDt tCD2CodeableConcept(CD cd) {
        	CodeableConceptDt myCodeableConceptDt = tCD2CodeableConceptExcludingTranslations(cd);
 
-		if(myCodeableConceptDt == null)
+		if (myCodeableConceptDt == null && cd.getTranslations().isEmpty()) {
 			return null;
+		} else if (myCodeableConceptDt == null) {
+			myCodeableConceptDt = new CodeableConceptDt();
+		}
        	
        	// translation
        	if(cd.getTranslations() != null && !cd.getTranslations().isEmpty()) {
