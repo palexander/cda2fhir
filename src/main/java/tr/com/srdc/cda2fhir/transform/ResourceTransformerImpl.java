@@ -2343,9 +2343,12 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         // value -> code
         if (cdaProbObs.getValues() != null && !cdaProbObs.getValues().isEmpty()) {
             for (ANY value : cdaProbObs.getValues()) {
-                if (value != null && !value.isSetNullFlavor()) {
+                if (value != null) {
                     if (value instanceof CD) {
-                        fhirCondition.setCode(dtt.tCD2CodeableConcept((CD) value));
+                        CD codes = (CD) value;
+                        if (!codes.isSetNullFlavor() || !codes.getTranslations().isEmpty()) {
+                            fhirCondition.setCode(dtt.tCD2CodeableConcept(codes));
+                        }
                     }
                 }
             }
