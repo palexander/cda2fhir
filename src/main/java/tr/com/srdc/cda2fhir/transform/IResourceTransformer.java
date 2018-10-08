@@ -21,6 +21,7 @@ package tr.com.srdc.cda2fhir.transform;
  */
 
 import ca.uhn.fhir.model.dstu2.composite.AgeDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.resource.*;
 import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Observation;
@@ -34,7 +35,14 @@ import org.openhealthtools.mdht.uml.cda.consol.*;
 import org.openhealthtools.mdht.uml.hl7.datatypes.CD;
 
 public interface IResourceTransformer {
-	
+
+	/**
+	 * Transforms a CDA code to FHIR codeable concept.
+	 * @param code
+	 * @return
+	 */
+	CodeableConceptDt tCE2CodeableConcept(CD code);
+
 	/**
 	 * Transforms a CDA AgeObservation instance to a FHIR AgeDt composite datatype instance
 	 * @param cdaAgeObservation A CDA AgeObservation instance

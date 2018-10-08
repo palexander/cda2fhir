@@ -97,6 +97,10 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             return defaultPatientRef;
     }
 
+    public CodeableConceptDt tCE2CodeableConcept(CD code) {
+        return dtt.tCD2CodeableConcept(code);
+    }
+
     public AgeDt tAgeObservation2AgeDt(org.openhealthtools.mdht.uml.cda.consol.AgeObservation cdaAgeObservation) {
         if (cdaAgeObservation == null || cdaAgeObservation.isSetNullFlavor())
             return null;
