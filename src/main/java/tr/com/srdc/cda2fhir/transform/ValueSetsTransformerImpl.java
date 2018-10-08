@@ -358,6 +358,15 @@ public class ValueSetsTransformerImpl implements IValueSetsTransformer, Serializ
 	        case "2.16.840.1.113883.6.4":
 	            system = "http://www.icd10data.com/icd10pcs";
 	            break;
+			case "2.16.840.1.113883.6.3.2":
+				system = "http://hl7.org/fhir/sid/icd-10-de";
+				break;
+			case "1.2.276.0.76.5.409":
+				system = "http://hl7.org/fhir/sid/icd-10-nl";
+				break;
+			case "2.16.840.1.113883.6.90":
+				system = "http://hl7.org/fhir/sid/icd-10-cm";
+				break;
 	        case "2.16.840.1.113883.6.42":
 	            system = "http://hl7.org/fhir/sid/icd-9";
 	            break;
