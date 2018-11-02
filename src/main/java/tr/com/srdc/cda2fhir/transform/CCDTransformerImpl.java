@@ -293,6 +293,10 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
                     Bundle procBundle = resTransformer.tProcedure2Procedure(proc);
                     mergeBundles(procBundle, ccdBundle, fhirSec, Procedure.class);
                 }
+                for(org.openhealthtools.mdht.uml.cda.Observation procObs : procSec.getObservations()) {
+                    Bundle socialObsBundle = resTransformer.tObservation2Observation(procObs);
+                    mergeBundles(socialObsBundle, ccdBundle, fhirSec, Observation.class);
+                }
             }
             else if(cdaSec instanceof ResultsSection) {
             	ResultsSection resultSec = (ResultsSection) cdaSec;
