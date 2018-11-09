@@ -35,17 +35,12 @@ import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 import ca.uhn.fhir.model.dstu2.valueset.*;
 
-import org.openhealthtools.mdht.uml.cda.*;
-import org.openhealthtools.mdht.uml.cda.AssignedAuthor;
-import org.openhealthtools.mdht.uml.cda.Author;
-import org.openhealthtools.mdht.uml.cda.Guardian;
-import org.openhealthtools.mdht.uml.cda.LanguageCommunication;
-import org.openhealthtools.mdht.uml.cda.PatientRole;
+import org.eclipse.mdht.uml.cda.*;
+import org.eclipse.mdht.uml.hl7.vocab.EntityDeterminer;
+import org.eclipse.mdht.uml.hl7.vocab.ParticipationType;
+import org.eclipse.mdht.uml.hl7.vocab.RoleClassRoot;
 import org.openhealthtools.mdht.uml.cda.consol.*;
-import org.openhealthtools.mdht.uml.hl7.datatypes.*;
-import org.openhealthtools.mdht.uml.hl7.vocab.EntityDeterminer;
-import org.openhealthtools.mdht.uml.hl7.vocab.ParticipationType;
-import org.openhealthtools.mdht.uml.hl7.vocab.RoleClassRoot;
+import org.eclipse.mdht.uml.hl7.datatypes.*;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.dstu2.resource.AllergyIntolerance.Reaction;
@@ -156,7 +151,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // author -> recorder
         if (cdaAllergyProbAct.getAuthors() != null && !cdaAllergyProbAct.getAuthors().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Author author : cdaAllergyProbAct.getAuthors()) {
+            for (org.eclipse.mdht.uml.cda.Author author : cdaAllergyProbAct.getAuthors()) {
                 // Asserting that at most one author exists
                 if (author != null && !author.isSetNullFlavor()) {
                     Practitioner fhirPractitioner = null;
@@ -279,7 +274,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
                                     if (entryRelShip.getObservation().getTemplateIds() != null && !entryRelShip.getObservation().getTemplateIds().isEmpty()) {
                                         for (II templateId : entryRelShip.getObservation().getTemplateIds()) {
                                             if (templateId.getRoot() != null && templateId.getRoot().equals("2.16.840.1.113883.10.20.22.4.145")) {
-                                                org.openhealthtools.mdht.uml.cda.Observation cdaCriticalityObservation = entryRelShip.getObservation();
+                                                org.eclipse.mdht.uml.cda.Observation cdaCriticalityObservation = entryRelShip.getObservation();
                                                 for (ANY value : cdaCriticalityObservation.getValues()) {
                                                     if (value != null && !value.isSetNullFlavor()) {
                                                         if (value instanceof CD) {
@@ -455,7 +450,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return fhirPractitionerBundle;
     }
 
-    public Bundle tAuthor2Practitioner(org.openhealthtools.mdht.uml.cda.Author cdaAuthor) {
+    public Bundle tAuthor2Practitioner(org.eclipse.mdht.uml.cda.Author cdaAuthor) {
         if (cdaAuthor == null || cdaAuthor.isSetNullFlavor()) {
             return null;
         } else if (cdaAuthor.getAssignedAuthor() == null || cdaAuthor.getAssignedAuthor().isSetNullFlavor()) {
@@ -571,7 +566,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         }
 
         // authenticator -> attester[mode = professional]
-        for (org.openhealthtools.mdht.uml.cda.Authenticator authenticator : cdaClinicalDocument.getAuthenticators()) {
+        for (org.eclipse.mdht.uml.cda.Authenticator authenticator : cdaClinicalDocument.getAuthenticators()) {
             if (!authenticator.isSetNullFlavor()) {
                 Composition.Attester attester = fhirComp.addAttester();
                 attester.setMode(CompositionAttestationModeEnum.PROFESSIONAL);
@@ -601,7 +596,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return fhirCompBundle;
     }
 
-    public Organization tCustodianOrganization2Organization(org.openhealthtools.mdht.uml.cda.CustodianOrganization cdaOrganization) {
+    public Organization tCustodianOrganization2Organization(org.eclipse.mdht.uml.cda.CustodianOrganization cdaOrganization) {
         if (cdaOrganization == null || cdaOrganization.isSetNullFlavor())
             return null;
 
@@ -650,7 +645,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return fhirOrganization;
     }
 
-    public Bundle tEncounter2Encounter(org.openhealthtools.mdht.uml.cda.Encounter cdaEncounter) {
+    public Bundle tEncounter2Encounter(org.eclipse.mdht.uml.cda.Encounter cdaEncounter) {
         if (cdaEncounter == null || cdaEncounter.isSetNullFlavor())
             return null;
 
@@ -716,7 +711,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // performer -> participant.individual
         if (cdaEncounter.getPerformers() != null && !cdaEncounter.getPerformers().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Performer2 cdaPerformer : cdaEncounter.getPerformers()) {
+            for (org.eclipse.mdht.uml.cda.Performer2 cdaPerformer : cdaEncounter.getPerformers()) {
                 if (cdaPerformer != null && !cdaPerformer.isSetNullFlavor()) {
                     ca.uhn.fhir.model.dstu2.resource.Encounter.Participant fhirParticipant = new ca.uhn.fhir.model.dstu2.resource.Encounter.Participant();
 
@@ -745,7 +740,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // participant[@typeCode='LOC'].participantRole[SDLOC] -> location.location
         if (cdaEncounter.getParticipants() != null && !cdaEncounter.getParticipants().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Participant2 cdaParticipant : cdaEncounter.getParticipants()) {
+            for (org.eclipse.mdht.uml.cda.Participant2 cdaParticipant : cdaEncounter.getParticipants()) {
                 if (cdaParticipant != null && !cdaParticipant.isSetNullFlavor()) {
                     // checking if the participant is location
                     if (cdaParticipant.getTypeCode() == ParticipationType.LOC) {
@@ -769,7 +764,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // entryRelationship[@typeCode='RSON'].observation[Indication] -> indication
         if (cdaEncounter.getEntryRelationships() != null && !cdaEncounter.getEntryRelationships().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.EntryRelationship entryRelShip : cdaEncounter.getEntryRelationships()) {
+            for (org.eclipse.mdht.uml.cda.EntryRelationship entryRelShip : cdaEncounter.getEntryRelationships()) {
                 if (entryRelShip != null && !entryRelShip.isSetNullFlavor()) {
                     if (entryRelShip.getObservation() != null && !entryRelShip.isSetNullFlavor()) {
                         if (entryRelShip.getObservation() instanceof Indication) {
@@ -859,7 +854,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // performer -> participant.individual
         if (cdaEncounterActivity.getPerformers() != null && !cdaEncounterActivity.getPerformers().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Performer2 cdaPerformer : cdaEncounterActivity.getPerformers()) {
+            for (org.eclipse.mdht.uml.cda.Performer2 cdaPerformer : cdaEncounterActivity.getPerformers()) {
                 if (cdaPerformer != null && !cdaPerformer.isSetNullFlavor()) {
                     ca.uhn.fhir.model.dstu2.resource.Encounter.Participant fhirParticipant = new ca.uhn.fhir.model.dstu2.resource.Encounter.Participant();
 
@@ -910,7 +905,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // participant[@typeCode='LOC'].participantRole[SDLOC] -> location
         if (cdaEncounterActivity.getParticipants() != null && !cdaEncounterActivity.getParticipants().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Participant2 cdaParticipant : cdaEncounterActivity.getParticipants()) {
+            for (org.eclipse.mdht.uml.cda.Participant2 cdaParticipant : cdaEncounterActivity.getParticipants()) {
                 if (cdaParticipant != null && !cdaParticipant.isSetNullFlavor()) {
 
                     // checking if the participant is location
@@ -932,6 +927,12 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             }
         }
 
+//        cdaEncounterActivity.getSDTCDischargeDispositionCodes();
+//        EncounterActivities target =  ConsolFactory.eINSTANCE.createEncounterActivities().init();
+//        target.getSDTCDischargeDispositionCodes();
+//        org.eclipse.mdht.uml.cda.Encounter testEnc = CDAFactory.eINSTANCE.createEncounter();
+//        testEnc.getSDTCDischargeDispositionCodes();
+
         return fhirEncounterBundle;
     }
 
@@ -939,7 +940,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         // never used
         if (cdaEntity == null || cdaEntity.isSetNullFlavor())
             return null;
-        else if (cdaEntity.getDeterminerCode() != org.openhealthtools.mdht.uml.hl7.vocab.EntityDeterminer.KIND)
+        else if (cdaEntity.getDeterminerCode() != EntityDeterminer.KIND)
             return null;
 
         Group fhirGroup = new Group();
@@ -1058,7 +1059,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // info from subject.relatedSubject
         if (cdaFHO.getSubject() != null && !cdaFHO.isSetNullFlavor() && cdaFHO.getSubject().getRelatedSubject() != null && !cdaFHO.getSubject().getRelatedSubject().isSetNullFlavor()) {
-            org.openhealthtools.mdht.uml.cda.RelatedSubject cdaRelatedSubject = cdaFHO.getSubject().getRelatedSubject();
+            org.eclipse.mdht.uml.cda.RelatedSubject cdaRelatedSubject = cdaFHO.getSubject().getRelatedSubject();
 
             // subject.relatedSubject.code -> relationship
             if (cdaRelatedSubject.getCode() != null && !cdaRelatedSubject.getCode().isSetNullFlavor()) {
@@ -1067,7 +1068,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
             // info from subject.relatedSubject.subject
             if (cdaRelatedSubject.getSubject() != null && !cdaRelatedSubject.getSubject().isSetNullFlavor()) {
-                org.openhealthtools.mdht.uml.cda.SubjectPerson subjectPerson = cdaRelatedSubject.getSubject();
+                org.eclipse.mdht.uml.cda.SubjectPerson subjectPerson = cdaRelatedSubject.getSubject();
 
                 // subject.relatedSubject.subject.name.text -> name
                 for (EN en : subjectPerson.getNames()) {
@@ -1103,7 +1104,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
      * .. to cover the content of the section.
      * Also, notice that the transformation of those Observations are different from the generic Observation transformation
      */
-    public Bundle tFunctionalStatus2Observation(org.openhealthtools.mdht.uml.cda.Observation cdaObservation) {
+    public Bundle tFunctionalStatus2Observation(org.eclipse.mdht.uml.cda.Observation cdaObservation) {
         if (cdaObservation == null || cdaObservation.isSetNullFlavor())
             return null;
 
@@ -1153,7 +1154,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // author -> performer
         if (cdaObservation.getAuthors() != null && !cdaObservation.getAuthors().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Author author : cdaObservation.getAuthors()) {
+            for (org.eclipse.mdht.uml.cda.Author author : cdaObservation.getAuthors()) {
                 if (author != null && !author.isSetNullFlavor()) {
                     Practitioner fhirPractitioner = null;
                     Bundle fhirPractitionerBundle = tAuthor2Practitioner(author);
@@ -1180,7 +1181,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             for (EntryRelationship entryRelShip : cdaObservation.getEntryRelationships()) {
                 if (entryRelShip != null && !entryRelShip.isSetNullFlavor()) {
                     // supply
-                    org.openhealthtools.mdht.uml.cda.Supply cdaSupply = entryRelShip.getSupply();
+                    org.eclipse.mdht.uml.cda.Supply cdaSupply = entryRelShip.getSupply();
                     if (cdaSupply != null && !cdaSupply.isSetNullFlavor()) {
                         if (cdaSupply instanceof NonMedicinalSupplyActivity) {
                             // Non-Medicinal Supply Activity
@@ -1631,7 +1632,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // getting info from effectiveTimes
         if (cdaMedicationActivity.getEffectiveTimes() != null && !cdaMedicationActivity.getEffectiveTimes().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.hl7.datatypes.SXCM_TS ts : cdaMedicationActivity.getEffectiveTimes()) {
+            for (SXCM_TS ts : cdaMedicationActivity.getEffectiveTimes()) {
                 if (ts != null && !ts.isSetNullFlavor()) {
                     // effectiveTime[@xsi:type='IVL_TS'] -> effective
                     if (ts instanceof IVL_TS) {
@@ -1751,7 +1752,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // performer -> dispenser
         if (cdaMedicationDispense.getPerformers() != null && !cdaMedicationDispense.getPerformers().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Performer2 cdaPerformer : cdaMedicationDispense.getPerformers()) {
+            for (org.eclipse.mdht.uml.cda.Performer2 cdaPerformer : cdaMedicationDispense.getPerformers()) {
                 if (cdaPerformer != null && !cdaPerformer.isSetNullFlavor()) {
                     // Asserting that at most one performer exists
                     ca.uhn.fhir.model.dstu2.resource.Practitioner fhirPractitioner = null;
@@ -1805,7 +1806,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             TimingDt fhirTiming = new TimingDt();
 
             // adding effectiveTimes to fhirTiming
-            for (org.openhealthtools.mdht.uml.hl7.datatypes.TS ts : cdaMedicationDispense.getEffectiveTimes()) {
+            for (TS ts : cdaMedicationDispense.getEffectiveTimes()) {
                 if (ts != null && !ts.isSetNullFlavor()) {
                     if (ts instanceof IVL_TS) {
                         TimingDt.Repeat repeat = new TimingDt.Repeat();
@@ -1841,7 +1842,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return tManufacturedProduct2Medication(cdaMedicationInformation);
     }
 
-    public Bundle tObservation2Observation(org.openhealthtools.mdht.uml.cda.Observation cdaObservation) {
+    public Bundle tObservation2Observation(org.eclipse.mdht.uml.cda.Observation cdaObservation) {
         if (cdaObservation == null || cdaObservation.isSetNullFlavor())
             return null;
 
@@ -1932,7 +1933,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // encounter -> encounter
         if (cdaObservation.getEncounters() != null && !cdaObservation.getEncounters().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Encounter cdaEncounter : cdaObservation.getEncounters()) {
+            for (org.eclipse.mdht.uml.cda.Encounter cdaEncounter : cdaObservation.getEncounters()) {
                 if (cdaEncounter != null && !cdaEncounter.isSetNullFlavor()) {
                     // Asserting at most one encounter exists
                     ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter = null;
@@ -1954,7 +1955,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         }
 
         // author -> performer
-        for (org.openhealthtools.mdht.uml.cda.Author author : cdaObservation.getAuthors()) {
+        for (org.eclipse.mdht.uml.cda.Author author : cdaObservation.getAuthors()) {
             if (author != null && !author.isSetNullFlavor()) {
                 Bundle fhirPractitionerBundle = tAuthor2Practitioner(author);
                 for (Bundle.Entry entry : fhirPractitionerBundle.getEntry()) {
@@ -1976,7 +1977,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // author.time -> issued
         if (cdaObservation.getAuthors() != null && !cdaObservation.getAuthors().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Author author : cdaObservation.getAuthors()) {
+            for (org.eclipse.mdht.uml.cda.Author author : cdaObservation.getAuthors()) {
                 if (author != null && !author.isSetNullFlavor()) {
                     // get time from author
                     if (author.getTime() != null && !author.getTime().isSetNullFlavor()) {
@@ -1988,7 +1989,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // interpretationCode -> interpretation
         if (cdaObservation.getInterpretationCodes() != null && !cdaObservation.getInterpretationCodes().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.hl7.datatypes.CE cdaInterprCode : cdaObservation.getInterpretationCodes()) {
+            for (CE cdaInterprCode : cdaObservation.getInterpretationCodes()) {
                 if (cdaInterprCode != null && !cdaInterprCode.isSetNullFlavor()) {
                     // Asserting that only one interpretation code exists
                     fhirObs.setInterpretation(vst.tObservationInterpretationCode2ObservationInterpretationCode(cdaInterprCode));
@@ -1998,7 +1999,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // referenceRange -> referenceRange
         if (cdaObservation.getReferenceRanges() != null && !cdaObservation.getReferenceRanges().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.ReferenceRange cdaReferenceRange : cdaObservation.getReferenceRanges()) {
+            for (org.eclipse.mdht.uml.cda.ReferenceRange cdaReferenceRange : cdaObservation.getReferenceRanges()) {
                 if (cdaReferenceRange != null && !cdaReferenceRange.isSetNullFlavor()) {
                     fhirObs.addReferenceRange(tReferenceRange2ReferenceRange(cdaReferenceRange));
                 }
@@ -2008,7 +2009,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return fhirObsBundle;
     }
 
-    public Organization tOrganization2Organization(org.openhealthtools.mdht.uml.cda.Organization cdaOrganization) {
+    public Organization tOrganization2Organization(org.eclipse.mdht.uml.cda.Organization cdaOrganization) {
         if (cdaOrganization == null || cdaOrganization.isSetNullFlavor())
             return null;
 
@@ -2173,7 +2174,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             fhirPatient.setManagingOrganization(organizationReference);
         }
 
-        org.openhealthtools.mdht.uml.cda.Patient cdaPatient = cdaPatientRole.getPatient();
+        org.eclipse.mdht.uml.cda.Patient cdaPatient = cdaPatientRole.getPatient();
 
         if (cdaPatient != null && !cdaPatient.isSetNullFlavor()) {
             // patient.name -> name
@@ -2210,7 +2211,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             }
 
             // patient.guardian -> contact
-            for (org.openhealthtools.mdht.uml.cda.Guardian guardian : cdaPatient.getGuardians()) {
+            for (org.eclipse.mdht.uml.cda.Guardian guardian : cdaPatient.getGuardians()) {
                 if (guardian != null && !guardian.isSetNullFlavor()) {
                     fhirPatient.addContact(tGuardian2Contact(guardian));
                 }
@@ -2411,7 +2412,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return fhirConditionBundle;
     }
 
-    public Bundle tProcedure2Procedure(org.openhealthtools.mdht.uml.cda.Procedure cdaProcedure) {
+    public Bundle tProcedure2Procedure(org.eclipse.mdht.uml.cda.Procedure cdaProcedure) {
         if (cdaProcedure == null || cdaProcedure.isSetNullFlavor())
             return null;
 
@@ -2485,7 +2486,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // encounter[0] -> encounter
         if (!cdaProcedure.getEncounters().isEmpty()) {
-            org.openhealthtools.mdht.uml.cda.Encounter cdaEncounter = cdaProcedure.getEncounters().get(0);
+            org.eclipse.mdht.uml.cda.Encounter cdaEncounter = cdaProcedure.getEncounters().get(0);
             if (cdaEncounter != null && !cdaEncounter.isSetNullFlavor()) {
                 Bundle encBundle = tEncounter2Encounter(cdaEncounter);
                 for (Bundle.Entry entry : encBundle.getEntry()) {
@@ -2504,7 +2505,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return tObservation2Observation(cdaReactionObservation);
     }
 
-    public Observation.ReferenceRange tReferenceRange2ReferenceRange(org.openhealthtools.mdht.uml.cda.ReferenceRange cdaReferenceRange) {
+    public Observation.ReferenceRange tReferenceRange2ReferenceRange(org.eclipse.mdht.uml.cda.ReferenceRange cdaReferenceRange) {
         if (cdaReferenceRange == null || cdaReferenceRange.isSetNullFlavor())
             return null;
 
@@ -2611,7 +2612,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // author.time -> issued
         if (cdaResultOrganizer.getAuthors() != null && !cdaResultOrganizer.getAuthors().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Author author : cdaResultOrganizer.getAuthors()) {
+            for (org.eclipse.mdht.uml.cda.Author author : cdaResultOrganizer.getAuthors()) {
                 if (author != null && !author.isSetNullFlavor()) {
                     if (author.getTime() != null && !author.getTime().isSetNullFlavor()) {
                         fhirDiagReport.setIssued(dtt.tTS2Instant(author.getTime()));
@@ -2641,7 +2642,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // author -> performer
         if (cdaResultOrganizer.getAuthors() != null && !cdaResultOrganizer.getAuthors().isEmpty()) {
-            for (org.openhealthtools.mdht.uml.cda.Author author : cdaResultOrganizer.getAuthors()) {
+            for (org.eclipse.mdht.uml.cda.Author author : cdaResultOrganizer.getAuthors()) {
                 // Asserting that at most one author exists
                 if (author != null && !author.isSetNullFlavor()) {
                     Bundle fhirPractitionerBundle = tAuthor2Practitioner(author);
@@ -2730,7 +2731,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
         return tParticipantRole2Location(cdaSDLOC);
     }
 
-    public ca.uhn.fhir.model.dstu2.resource.Device tSupply2Device(org.openhealthtools.mdht.uml.cda.Supply cdaSupply) {
+    public ca.uhn.fhir.model.dstu2.resource.Device tSupply2Device(org.eclipse.mdht.uml.cda.Supply cdaSupply) {
         if (cdaSupply == null || cdaSupply.isSetNullFlavor())
             return null;
 

@@ -22,15 +22,10 @@ package tr.com.srdc.cda2fhir.transform;
 
 import ca.uhn.fhir.model.dstu2.valueset.*;
 
-import org.openhealthtools.mdht.uml.hl7.datatypes.CD;
-import org.openhealthtools.mdht.uml.hl7.vocab.EntityClassRoot;
-import org.openhealthtools.mdht.uml.hl7.vocab.EntityNameUse;
-import org.openhealthtools.mdht.uml.hl7.vocab.NullFlavor;
-import org.openhealthtools.mdht.uml.hl7.vocab.PostalAddressUse;
-import org.openhealthtools.mdht.uml.hl7.vocab.TelecommunicationAddressUse;
-
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import org.eclipse.mdht.uml.hl7.datatypes.CD;
+import org.eclipse.mdht.uml.hl7.vocab.*;
 
 import java.io.Serializable;
 
@@ -416,7 +411,7 @@ public class ValueSetsTransformerImpl implements IValueSetsTransformer, Serializ
 		return system;
 	}
 
-	public CodingDt tParticipationType2ParticipationTypeCode(org.openhealthtools.mdht.uml.hl7.vocab.ParticipationType cdaParticipationType) {
+	public CodingDt tParticipationType2ParticipationTypeCode(ParticipationType cdaParticipationType) {
 		CodingDt fhirParticipationType = new CodingDt();
 		fhirParticipationType.setSystem("http://hl7.org/fhir/v3/ParticipationType");
 		String code = null;

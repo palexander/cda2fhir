@@ -23,7 +23,7 @@ package tr.com.srdc.cda2fhir.transform;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
-import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
+import org.eclipse.mdht.uml.cda.ClinicalDocument;
 import tr.com.srdc.cda2fhir.util.IdGeneratorEnum;
 
 import java.util.Map;

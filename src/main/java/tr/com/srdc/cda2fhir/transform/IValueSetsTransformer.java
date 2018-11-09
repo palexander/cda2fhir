@@ -22,15 +22,10 @@ package tr.com.srdc.cda2fhir.transform;
 
 import ca.uhn.fhir.model.dstu2.valueset.*;
 
-import org.openhealthtools.mdht.uml.hl7.datatypes.CD;
-import org.openhealthtools.mdht.uml.hl7.vocab.EntityClassRoot;
-import org.openhealthtools.mdht.uml.hl7.vocab.EntityNameUse;
-import org.openhealthtools.mdht.uml.hl7.vocab.NullFlavor;
-import org.openhealthtools.mdht.uml.hl7.vocab.PostalAddressUse;
-import org.openhealthtools.mdht.uml.hl7.vocab.TelecommunicationAddressUse;
-
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import org.eclipse.mdht.uml.hl7.datatypes.CD;
+import org.eclipse.mdht.uml.hl7.vocab.*;
 
 public interface IValueSetsTransformer {
 	
@@ -130,7 +125,7 @@ public interface IValueSetsTransformer {
 	 * @param cdaParticipationType A CDA ParticipationType vocable
 	 * @return A FHIR CodingDt composite datatype which includes the code about ParticipationType
 	 */
-	CodingDt tParticipationType2ParticipationTypeCode(org.openhealthtools.mdht.uml.hl7.vocab.ParticipationType cdaParticipationType);
+	CodingDt tParticipationType2ParticipationTypeCode(ParticipationType cdaParticipationType);
 
 	/**
 	 * Transforms a CDA PeriodUnit string to a value from the FHIR valueset UnitsOfTimeEnum.

@@ -44,11 +44,10 @@ import java.util.TimeZone;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.util.BasicFeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.openhealthtools.mdht.uml.cda.StrucDocText;
-import org.openhealthtools.mdht.uml.hl7.datatypes.*;
-import org.openhealthtools.mdht.uml.hl7.vocab.EntityNameUse;
-import org.openhealthtools.mdht.uml.hl7.vocab.PostalAddressUse;
-import org.openhealthtools.mdht.uml.hl7.vocab.TelecommunicationAddressUse;
+import org.eclipse.mdht.uml.cda.StrucDocText;
+import org.eclipse.mdht.uml.hl7.datatypes.*;
+import org.eclipse.mdht.uml.hl7.vocab.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -579,7 +578,7 @@ public class DataTypesTransformerImpl implements IDataTypesTransformer, Serializ
 		
 		// translation -> system and code
 		if(pq.getTranslations() != null && !pq.getTranslations().isEmpty()) {
-			for(org.openhealthtools.mdht.uml.hl7.datatypes.PQR pqr : pq.getTranslations()) {
+			for(PQR pqr : pq.getTranslations()) {
 				if(pqr != null && !pqr.isSetNullFlavor()) {
 					// codeSystem -> system
 					if(pqr.getCodeSystem() != null && !pqr.getCodeSystem().isEmpty()) {
@@ -817,7 +816,7 @@ public class DataTypesTransformerImpl implements IDataTypesTransformer, Serializ
 	 * @param entry A EStructuralFeatureImpl.ContainmentUpdatingFeatureMapEntry instance
 	 * @return A Java String list containing the start tag and end tag of an HTML element in form: &lt;tagName attribute="attributeValue"&gt;. While first element of the list correspons to the start tag, second element of the list corresponds to the end tag.
 	 */
-	private List<String> getTagsHelperForTStructDocText2String(org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.ContainmentUpdatingFeatureMapEntry entry) {
+	private List<String> getTagsHelperForTStructDocText2String(EStructuralFeatureImpl.ContainmentUpdatingFeatureMapEntry entry) {
 		if(entry == null)
 			return null;
 		String startTag = "";
@@ -916,8 +915,8 @@ public class DataTypesTransformerImpl implements IDataTypesTransformer, Serializ
 	 * @return A Java String containing the transformed text
 	 */
 	private String tStrucDocText2String(Object param) {
-		if(param instanceof org.openhealthtools.mdht.uml.cda.StrucDocText) {
-			org.openhealthtools.mdht.uml.cda.StrucDocText paramStrucDocText = (org.openhealthtools.mdht.uml.cda.StrucDocText)param;
+		if(param instanceof StrucDocText) {
+			StrucDocText paramStrucDocText = (StrucDocText) param;
 			return "<div>" +tStrucDocText2String(paramStrucDocText.getMixed()) + "</div>";
 		} 
 		else if(param instanceof BasicFeatureMap) {

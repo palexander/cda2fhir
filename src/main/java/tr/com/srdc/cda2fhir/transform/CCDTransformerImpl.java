@@ -30,9 +30,9 @@ import ca.uhn.fhir.model.dstu2.resource.Observation;
 import ca.uhn.fhir.model.dstu2.resource.Procedure;
 import ca.uhn.fhir.model.dstu2.valueset.BundleTypeEnum;
 import ca.uhn.fhir.model.dstu2.valueset.HTTPVerbEnum;
-import org.openhealthtools.mdht.uml.cda.*;
+import org.eclipse.mdht.uml.cda.*;
+import org.eclipse.mdht.uml.hl7.datatypes.CD;
 import org.openhealthtools.mdht.uml.cda.consol.*;
-import org.openhealthtools.mdht.uml.hl7.datatypes.CD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tr.com.srdc.cda2fhir.util.IdGeneratorEnum;
@@ -74,7 +74,7 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
     public ResourceReferenceDt getPatientRef() {
         return patientRef;
     }
-    
+
     public synchronized String getUniqueId() {
         switch (this.idGenerator) {
             case COUNTER:
@@ -177,12 +177,12 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
         // transform the sections
         for(Section cdaSec: ccd.getSections()) {
             Composition.Section fhirSec = resTransformer.tSection2Section(cdaSec);
-            
+
             if(fhirSec == null)
             	continue;
             else
                 ccdComposition.addSection(fhirSec);
-            
+
             if(cdaSec instanceof AdvanceDirectivesSection) {
 
             }
@@ -212,7 +212,7 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
             else if(cdaSec instanceof FunctionalStatusSection) {
                 FunctionalStatusSection funcSec = (FunctionalStatusSection) cdaSec;
                 for(FunctionalStatusResultOrganizer funcOrganizer : funcSec.getFunctionalStatusResultOrganizers()) {
-                    for(org.openhealthtools.mdht.uml.cda.Observation funcObservation : funcOrganizer.getObservations()) {
+                    for(org.eclipse.mdht.uml.cda.Observation funcObservation : funcOrganizer.getObservations()) {
                         Bundle funcBundle = resTransformer.tFunctionalStatus2Observation(funcObservation);
                         mergeBundles(funcBundle, ccdBundle, fhirSec, Observation.class);
                     }
@@ -246,7 +246,7 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
                     }
                 }
                 // Case 3: Entry is a Procedure Activity Procedure (V2)
-                for(org.openhealthtools.mdht.uml.cda.Procedure procedure : equipSec.getProcedures()) {
+                for(org.eclipse.mdht.uml.cda.Procedure procedure : equipSec.getProcedures()) {
                     if(procedure instanceof ProcedureActivityProcedure) {
                         Bundle procBundle = resTransformer.tProcedure2Procedure(procedure);
                         mergeBundles(procBundle, ccdBundle, fhirSec, Procedure.class);
@@ -293,7 +293,7 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
                     Bundle procBundle = resTransformer.tProcedure2Procedure(proc);
                     mergeBundles(procBundle, ccdBundle, fhirSec, Procedure.class);
                 }
-                for(org.openhealthtools.mdht.uml.cda.Observation procObs : procSec.getObservations()) {
+                for(org.eclipse.mdht.uml.cda.Observation procObs : procSec.getObservations()) {
                     Bundle procBundle = resTransformer.tObservation2Observation(procObs);
                     mergeBundles(procBundle, ccdBundle, fhirSec, Observation.class);
                 }
@@ -317,7 +317,7 @@ public class CCDTransformerImpl implements ICDATransformer, Serializable {
                  *    Social History Observation (V3)
                  *    Tobacco Use (V2)
                  */
-                for(org.openhealthtools.mdht.uml.cda.Observation socialObs : socialSec.getObservations()) {
+                for(org.eclipse.mdht.uml.cda.Observation socialObs : socialSec.getObservations()) {
                     Bundle socialObsBundle = resTransformer.tObservation2Observation(socialObs);
                     mergeBundles(socialObsBundle, ccdBundle, fhirSec, Observation.class);
                 }

@@ -27,12 +27,12 @@ import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Observation;
 import ca.uhn.fhir.model.dstu2.resource.Organization;
 import ca.uhn.fhir.model.dstu2.resource.Patient.Communication;
-import org.openhealthtools.mdht.uml.cda.*;
-import org.openhealthtools.mdht.uml.cda.AssignedAuthor;
-import org.openhealthtools.mdht.uml.cda.LanguageCommunication;
-import org.openhealthtools.mdht.uml.cda.PatientRole;
+import org.eclipse.mdht.uml.cda.*;
+import org.eclipse.mdht.uml.cda.AssignedAuthor;
+import org.eclipse.mdht.uml.cda.LanguageCommunication;
+import org.eclipse.mdht.uml.cda.PatientRole;
+import org.eclipse.mdht.uml.hl7.datatypes.CD;
 import org.openhealthtools.mdht.uml.cda.consol.*;
-import org.openhealthtools.mdht.uml.hl7.datatypes.CD;
 
 public interface IResourceTransformer {
 
@@ -76,7 +76,7 @@ public interface IResourceTransformer {
 	 * @param cdaAuthor A CDA Author instance
 	 * @return A FHIR Bundle that contains the Practitioner as the first entry, which can also include other referenced resources such as Organization
 	 */
-	Bundle tAuthor2Practitioner(org.openhealthtools.mdht.uml.cda.Author cdaAuthor);
+	Bundle tAuthor2Practitioner(org.eclipse.mdht.uml.cda.Author cdaAuthor);
 	/**
 	 * Transforms a CDA CD instance to a FHIR Substance resource.
 	 * @param cdaSubstanceCode A CDA CD instance
@@ -96,14 +96,14 @@ public interface IResourceTransformer {
 	 * @param cdaCustodianOrganization A CDA CustodianOrganization instance
 	 * @return A FHIR Organization resource
 	 */
-	Organization tCustodianOrganization2Organization(org.openhealthtools.mdht.uml.cda.CustodianOrganization cdaCustodianOrganization);
+	Organization tCustodianOrganization2Organization(org.eclipse.mdht.uml.cda.CustodianOrganization cdaCustodianOrganization);
 	
 	/**
 	 * Transforms a CDA Encounter instance to a FHIR Encounter resource.
 	 * @param cdaEncounter A CDA Encounter instance
 	 * @return A FHIR Bundle that contains the Encounter as the first entry, which can also include other referenced resources such as Practitioner, Location
 	 */
-	Bundle tEncounter2Encounter(org.openhealthtools.mdht.uml.cda.Encounter cdaEncounter);
+	Bundle tEncounter2Encounter(org.eclipse.mdht.uml.cda.Encounter cdaEncounter);
 
 	/**
 	 * Transforms a CDA EncounterActivity instance to a FHIR Encounter resource.
@@ -131,14 +131,14 @@ public interface IResourceTransformer {
 	 * @param cdaObservation A CDA Observation instance that is included in Functional Status Section
 	 * @return A FHIR Bundle that contains the Observation as the first entry, which can also include other referenced resources such as Practitioner
 	 */
-	Bundle tFunctionalStatus2Observation(org.openhealthtools.mdht.uml.cda.Observation cdaObservation);
+	Bundle tFunctionalStatus2Observation(org.eclipse.mdht.uml.cda.Observation cdaObservation);
 
     /**
      * Transforms a CDA Guardian instance to a FHIR Patient.Contact resource.
      * @param cdaGuardian A CDA Guardian instance
      * @return A FHIR Patient.Contact resource
      */
-    ca.uhn.fhir.model.dstu2.resource.Patient.Contact tGuardian2Contact(org.openhealthtools.mdht.uml.cda.Guardian cdaGuardian);
+    ca.uhn.fhir.model.dstu2.resource.Patient.Contact tGuardian2Contact(org.eclipse.mdht.uml.cda.Guardian cdaGuardian);
     
 	/**
 	 * Transforms a CDA ImmunizationActivity instance to a FHIR Immunization resource.
@@ -193,14 +193,14 @@ public interface IResourceTransformer {
 	 * @param cdaObservation A CDA Observation instance
 	 * @return A FHIR Bundle that contains the Observation as the first entry, which can also include other referenced resources such as Encounter, Practitioner
 	 */
-	Bundle tObservation2Observation(org.openhealthtools.mdht.uml.cda.Observation cdaObservation);
+	Bundle tObservation2Observation(org.eclipse.mdht.uml.cda.Observation cdaObservation);
 	
 	/**
 	 * Transforms a CDA Organization instance to a FHIR Organization resource.
 	 * @param cdaOrganization A CDA Organization instance
 	 * @return A FHIR Organization resource
 	 */
-	Organization tOrganization2Organization(org.openhealthtools.mdht.uml.cda.Organization cdaOrganization);
+	Organization tOrganization2Organization(org.eclipse.mdht.uml.cda.Organization cdaOrganization);
 	
 	/**
 	 * Transforms a CDA ParticipantRole instance to a FHIR Location resource.
@@ -242,7 +242,7 @@ public interface IResourceTransformer {
 	 * @param cdaProcedure A CDA Procedure instance
 	 * @return A FHIR Bundle that contains the Procedure as the first entry, which can also include other referenced resources such as Practitioner
 	 */
-	Bundle tProcedure2Procedure(org.openhealthtools.mdht.uml.cda.Procedure cdaProcedure);
+	Bundle tProcedure2Procedure(org.eclipse.mdht.uml.cda.Procedure cdaProcedure);
 
 	/**
 	 * Transforms a CDA ReactionObservation instance to a FHIR Observation resource.
@@ -256,7 +256,7 @@ public interface IResourceTransformer {
      * @param cdaReferenceRange A CDA ReferenceRange instance
      * @return A FHIR Observation.ReferenceRange resource
      */
-	Observation.ReferenceRange tReferenceRange2ReferenceRange(org.openhealthtools.mdht.uml.cda.ReferenceRange cdaReferenceRange);
+	Observation.ReferenceRange tReferenceRange2ReferenceRange(org.eclipse.mdht.uml.cda.ReferenceRange cdaReferenceRange);
     
 	/**
 	 * Transforms a CDA ResultObservation instance to a FHIR Observation resource.
@@ -291,7 +291,7 @@ public interface IResourceTransformer {
 	 * @param cdaSupply A CDA Supply instance
 	 * @return A FHIR Device resource
 	 */
-	ca.uhn.fhir.model.dstu2.resource.Device tSupply2Device(org.openhealthtools.mdht.uml.cda.Supply cdaSupply);
+	ca.uhn.fhir.model.dstu2.resource.Device tSupply2Device(org.eclipse.mdht.uml.cda.Supply cdaSupply);
 
 	/**
 	 * Transforms a CDA VitalSignObservation to a FHIR Observation resource.
