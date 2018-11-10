@@ -21,6 +21,7 @@ package tr.com.srdc.cda2fhir.transform;
  */
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 import ca.uhn.fhir.model.dstu2.composite.*;
@@ -927,11 +928,15 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             }
         }
 
-//        cdaEncounterActivity.getSDTCDischargeDispositionCodes();
-//        EncounterActivities target =  ConsolFactory.eINSTANCE.createEncounterActivities().init();
-//        target.getSDTCDischargeDispositionCodes();
-//        org.eclipse.mdht.uml.cda.Encounter testEnc = CDAFactory.eINSTANCE.createEncounter();
-//        testEnc.getSDTCDischargeDispositionCodes();
+        List<CE> dischargeCodes = cdaEncounterActivity.getSDTCDischargeDispositionCodes();
+        if (dischargeCodes != null && !dischargeCodes.isEmpty()) {
+            if (dischargeCodes.size() > 1)
+                logger.warn("More than one discharge disposition code for encounter");
+            Encounter.Hospitalization hosp = new Encounter.Hospitalization();
+            CodeableConceptDt newCode = tCE2CodeableConcept(dischargeCodes.get(0));
+            hosp.setDischargeDisposition(newCode);
+            fhirEncounter.setHospitalization(hosp);
+        }
 
         return fhirEncounterBundle;
     }
