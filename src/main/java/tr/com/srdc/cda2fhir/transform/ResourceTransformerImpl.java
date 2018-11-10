@@ -21,6 +21,7 @@ package tr.com.srdc.cda2fhir.transform;
  */
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -1433,6 +1434,9 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
             }
         }
 
+        // body sites
+        fhirCond.setBodySite(targetSites(cdaIndication));
+
         // code -> category
         if (cdaIndication.getCode() != null && !cdaIndication.getCode().isSetNullFlavor()) {
             if (cdaIndication.getCode().getCode() != null) {
@@ -2277,6 +2281,22 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
     }
 
+    private List<CodeableConceptDt> targetSites(org.eclipse.mdht.uml.cda.Observation obs) {
+        List<CodeableConceptDt> bodySites = new ArrayList<>();
+        for (CD code : obs.getTargetSiteCodes()) {
+            CodeableConceptDt bodySite = tCE2CodeableConcept(code);
+            for (CR qual : code.getQualifiers()) {
+                CodeableConceptDt qualCode = tCE2CodeableConcept(qual.getValue());
+                ExtensionDt extensionDt = new ExtensionDt();
+                extensionDt.setUrl("http://hl7.org/fhir/BodySite.qualifier");
+                extensionDt.setValue(qualCode);
+                bodySite.addUndeclaredExtension(extensionDt);
+            }
+            bodySites.add(bodySite);
+        }
+        return bodySites;
+    }
+
     public Bundle tProblemConcernAct2Condition(ProblemConcernAct cdaProblemConcernAct) {
         if (cdaProblemConcernAct == null || cdaProblemConcernAct.isSetNullFlavor())
             return null;
@@ -2298,6 +2318,7 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
                     // NOTE: Problem status template is deprecated in C-CDA Release 2.1; hence status data is not retrieved from this template.
                     if (cdaProblemConcernAct.getStatusCode() != null && !cdaProblemConcernAct.getStatusCode().isSetNullFlavor()) {
                         fhirCond.setClinicalStatus(vst.tStatusCode2ConditionClinicalStatusCodesEnum(cdaProblemConcernAct.getStatusCode().getCode()));
+                        fhirCond.setBodySite(targetSites(cdaProbObs));
                     }
                 }
             }
@@ -2328,6 +2349,9 @@ public class ResourceTransformerImpl implements IResourceTransformer, Serializab
 
         // patient
         fhirCondition.setPatient(getPatientRef());
+
+        // body site
+        fhirCondition.setBodySite(targetSites(cdaProbObs));
 
         // id -> identifier
         for (II id : cdaProbObs.getIds()) {
